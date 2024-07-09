@@ -22,7 +22,9 @@ public class QuestionController {
 
     @GetMapping
     @Operation(summary = "Retrieves random questions from main theme", responses = {
-            @ApiResponse(responseCode = "201", description = "Theme created")
+            @ApiResponse(responseCode = "201", description = "Questions found"),
+            @ApiResponse(responseCode = "400", description = "Impossible to retrieve questions with given parameters"),
+            @ApiResponse(responseCode = "404", description = "Questions not found")
     })
     public List<Question> getRandomQuestions(@RequestParam long themeId, @RequestParam int nbQuestions){
         return questionService.getRandomQuestions(themeId, nbQuestions);

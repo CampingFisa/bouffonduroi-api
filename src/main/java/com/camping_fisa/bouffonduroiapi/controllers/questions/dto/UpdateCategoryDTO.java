@@ -1,12 +1,10 @@
 package com.camping_fisa.bouffonduroiapi.controllers.questions.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 public class UpdateCategoryDTO {
     private String categoryName;
     private String categoryDescription;

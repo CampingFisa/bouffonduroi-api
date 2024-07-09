@@ -21,7 +21,9 @@ public class CategoryController {
 
     @PutMapping("/{categoryId}")
     @Operation(summary = "Update a category", responses = {
-            @ApiResponse(responseCode = "200", description = "Category updated")
+            @ApiResponse(responseCode = "200", description = "Category updated"),
+            @ApiResponse(responseCode = "400", description = "Impossible to create a category with given parameters"),
+            @ApiResponse(responseCode = "404", description = "Category not found")
     })
     public Category updateCategory(@PathVariable int categoryId, @RequestBody UpdateCategoryDTO updateCategoryDTO) {
         return categoryService.updateCategory(categoryId, updateCategoryDTO);

@@ -1,17 +1,12 @@
 package com.camping_fisa.bouffonduroiapi.controllers.questions.dto;
 
 import com.camping_fisa.bouffonduroiapi.entities.questions.Category;
-import com.camping_fisa.bouffonduroiapi.entities.questions.Theme;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 public class ThemeDTO {
-
-    private Integer themeId;
 
     private String themeName;
 
