@@ -15,7 +15,9 @@ public class NotFoundException extends RuntimeException {
     public NotFoundException(Class<?> objectClass) {
         this.objectClass = objectClass;
     }
-
+    public NotFoundException(String message) {
+        super(message);
+    }
     @JsonAlias("message")
     public String getMessage() {
         if (id == null) {
