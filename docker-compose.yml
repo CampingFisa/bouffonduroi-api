@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  jesterquizz-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: jesterquizz-api
+    restart: unless-stopped
+    ports:
+      - "8082:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://jesterquiz-db:5432/bouffonduroi
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: admin
+      SPRING_PROFILES_ACTIVE: prod
+    depends_on:
+      - jesterquiz-db
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+
+  jesterquiz-db:
+    image: postgres:15
+    container_name: jesterquiz-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: bouffonduroi
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+volumes:
+  db_data:
