@@ -13,7 +13,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://jesterquiz-db:5432/bouffonduroi
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: admin
-      SPRING_PROFILES_ACTIVE: prod
+      # SPRING_PROFILES_ACTIVE: prod
     depends_on:
       - jesterquiz-db
     labels:
