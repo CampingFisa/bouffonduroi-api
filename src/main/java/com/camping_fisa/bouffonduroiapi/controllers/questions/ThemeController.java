@@ -3,12 +3,13 @@ package com.camping_fisa.bouffonduroiapi.controllers.questions;
 import com.camping_fisa.bouffonduroiapi.controllers.questions.dto.ThemeDTO;
 import com.camping_fisa.bouffonduroiapi.entities.questions.Theme;
 import com.camping_fisa.bouffonduroiapi.services.questions.ThemeService;
-import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.web.bind.annotation.*;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import java.util.List;
+
 
 @RestController
 @RequestMapping("/api/themes")
@@ -26,8 +27,17 @@ public class ThemeController {
             @ApiResponse(responseCode = "200", description = "Themes found"),
             @ApiResponse(responseCode = "404", description = "Themes not found")
     })
-    public List<Theme> getAllThemes() {
-        return themeService.getAllThemes();
+    public List<Theme> getAllThemes(@RequestParam(required = false) Boolean isMain) {
+        return themeService.getAllThemes(isMain);
+    }
+
+    @GetMapping("/{themeId}")
+    @Operation(summary = "Retrieves all themes", responses = {
+            @ApiResponse(responseCode = "200", description = "Themes found"),
+            @ApiResponse(responseCode = "404", description = "Themes not found")
+    })
+    public Theme getThemeById(@PathVariable Long themeId) {
+        return themeService.getThemeById(themeId);
     }
 
     @PostMapping
