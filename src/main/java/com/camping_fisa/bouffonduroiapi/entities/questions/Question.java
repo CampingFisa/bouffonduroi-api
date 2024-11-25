@@ -34,12 +34,12 @@ public class Question {
 
     @ManyToOne
     @JoinColumn(name = "category_id")
-    @JsonBackReference
+    @JsonBackReference(value = "category_id")
     private Category category;
 
     @ManyToOne
     @JoinColumn(name = "main_theme_id")
-    @JsonBackReference
+    @JsonBackReference(value = "main_theme")
     private Theme mainTheme;
 
 }
