@@ -3,9 +3,11 @@ package com.camping_fisa.bouffonduroiapi.services.questions;
 import com.camping_fisa.bouffonduroiapi.controllers.questions.dto.ThemeDTO;
 import com.camping_fisa.bouffonduroiapi.entities.questions.Category;
 import com.camping_fisa.bouffonduroiapi.entities.questions.Theme;
+import com.camping_fisa.bouffonduroiapi.exceptions.NotFoundException;
 import com.camping_fisa.bouffonduroiapi.repositories.questions.ThemeRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -17,8 +19,12 @@ public class ThemeService {
         this.themeRepository = themeRepository;
     }
 
-    public List<Theme> getAllThemes() {
-        return themeRepository.findAll();
+    public List<Theme> getAllThemes(Boolean isMain) {
+        if (isMain != null) {
+            return themeRepository.findByIsMain(isMain);
+        } else {
+            return themeRepository.findAll();
+        }
     }
 
     private void setParentForChildren(Theme newTheme) {
@@ -53,4 +59,8 @@ public class ThemeService {
         );
     }
 
+    public Theme getThemeById(Long themeId) {
+        return themeRepository.findById(themeId)
+                .orElseThrow(() -> new NotFoundException(Math.toIntExact(themeId), Theme.class));
+    }
 }
