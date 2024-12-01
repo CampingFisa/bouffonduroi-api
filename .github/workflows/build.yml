@@ -31,6 +31,7 @@ jobs:
       - name: Log in to Docker registry
         run: echo "t" | docker login registry.mathieu-symphorien.fr --username "t" --password-stdin
 
-      - name: Push Docker image
+      - name: Tag and Push Docker image
         run: |
+          docker tag registry.mathieu-symphorien.fr/bouffonduroi-api-jesterquizz-api:latest registry.mathieu-symphorien.fr/bouffonduroi-api-jesterquizz-api:latest
           docker push registry.mathieu-symphorien.fr/bouffonduroi-api-jesterquizz-api:latest
