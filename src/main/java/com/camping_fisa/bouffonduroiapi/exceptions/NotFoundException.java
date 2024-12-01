@@ -11,18 +11,25 @@ public class NotFoundException extends RuntimeException {
         this.id = id == null ? "null" : String.valueOf(id);
         this.objectClass = objectClass;
     }
-
+    public NotFoundException(String id, Class<?> objectClass) {
+        this.id = id;
+        this.objectClass = objectClass;
+    }
     public NotFoundException(Class<?> objectClass) {
         this.objectClass = objectClass;
     }
     public NotFoundException(String message) {
         super(message);
     }
+    @Override
     @JsonAlias("message")
     public String getMessage() {
+        String objectName = (objectClass != null) ? objectClass.getSimpleName() : "Unknown";
         if (id == null) {
-            return "Unable to retrieve instance of " + objectClass.getSimpleName() + ".";
+            return "Unable to retrieve instance of " + objectName + ".";
         }
-        return "Unable to retrieve instance of " + objectClass.getSimpleName() + " with id " + id + ".";
+        return "Unable to retrieve instance of " + objectName + " with id " + id + ".";
     }
+
+
 }
