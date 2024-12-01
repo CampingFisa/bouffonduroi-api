@@ -24,13 +24,13 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t registry.mathieu-symphorien.fr/jesterquiz:latest .
+          docker build -t registry.mathieu-symphorien.fr/bouffonduroi-api-jesterquizz-api:latest .
         env:
           DOCKER_BUILDKIT: 1
 
       - name: Log in to Docker registry
-        run: echo "${{ secrets.REGISTRY_PASSWORD }}" | docker login registry.mathieu-symphorien.fr --username "${{ secrets.REGISTRY_USERNAME }}" --password-stdin
+        run: echo "" | docker login registry.mathieu-symphorien.fr --username "" --password-stdin
 
       - name: Push Docker image
         run: |
-          docker push registry.mathieu-symphorien.fr/jesterquiz:latest
+          docker push registry.mathieu-symphorien.fr/bouffonduroi-api-jesterquizz-api:latest
