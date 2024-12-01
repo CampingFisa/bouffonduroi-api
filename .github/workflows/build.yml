@@ -29,7 +29,7 @@ jobs:
           DOCKER_BUILDKIT: 1
 
       - name: Log in to Docker registry
-        run: echo "" | docker login registry.mathieu-symphorien.fr --username "" --password-stdin
+        run: echo "t" | docker login registry.mathieu-symphorien.fr --username "t" --password-stdin
 
       - name: Push Docker image
         run: |
