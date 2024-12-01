@@ -1,32 +1,25 @@
-# Étape 1 : Construction de l'application avec Maven
-FROM eclipse-temurin:21-jdk AS build
-
-# Installer Maven
-RUN apt-get update && \
-    apt-get install -y maven && \
-    rm -rf /var/lib/apt/lists/*
+# Étape 1 : Construction de l'application avec Maven et JDK
+FROM maven:3.9.4-eclipse-temurin-21 AS build
 
 # Définir le répertoire de travail
-WORKDIR /app
+WORKDIR /build
 
 # Copier le fichier pom.xml et télécharger les dépendances
-COPY pom.xml .
+COPY pom.xml /build/pom.xml
 RUN mvn dependency:go-offline
 
-# Copier le reste du code source
-COPY src ./src
-
-# Construire l'application
+# Copier le reste du code source et construire l'application
+COPY src /build/src
 RUN mvn clean package -DskipTests
 
-# Étape 2 : Exécution de l'application
-FROM eclipse-temurin:21-jdk
+# Étape 2 : Exécution de l'application avec un JRE léger
+FROM eclipse-temurin:21-jre-alpine AS runtime
 
 # Définir le répertoire de travail
 WORKDIR /app
 
 # Copier le fichier JAR généré lors de l'étape précédente
-COPY --from=build /app/target/*.jar app.jar
+COPY --from=build /build/target/*.jar /app/app.jar
 
 # Exposer le port sur lequel l'application écoute
 EXPOSE 8080
