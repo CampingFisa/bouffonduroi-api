@@ -10,6 +10,6 @@ public class TestController {
 
     @GetMapping("/test")
     public String testEndpoint() {
-        return "L'api fonctionne correctement en production V3.";
+        return "L'api fonctionne correctement en production V4.";
     }
 }
