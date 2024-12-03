@@ -24,7 +24,7 @@ public class CategoryService {
 
     public Category updateCategory(long categoryId, UpdateCategoryDTO updateCategoryDTO) {
         Category existingCategory = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new NotFoundException((int) categoryId, Category.class));
+                .orElseThrow(() -> new NotFoundException(String.valueOf((int) categoryId), Category.class));
 
         Theme mainTheme = themeRepository.findById(existingCategory.getTheme().getThemeId())
                 .orElseThrow(() -> new NotFoundException(Math.toIntExact(existingCategory.getTheme().getThemeId())

@@ -13,8 +13,10 @@ import java.util.Optional;
 @Repository
 public interface FriendshipRepository extends JpaRepository<Friendship, Long> {
 
-    // Récupère toutes les amitiés où l'utilisateur est soit user1 soit user2
-    @Query("SELECT f FROM Friendship f WHERE (f.user1 = :user AND f.user2 = :friend) OR (f.user1 = :friend AND f.user2 = :user)")
-    Optional<Friendship> findFriendshipBetweenUsers(@Param("user") User user, @Param("friend") User friend);
+    @Query("SELECT f FROM Friendship f WHERE (f.user1 = :user OR f.user2 = :user)")
+    List<Friendship> findAllByUser(@Param("user") User user);
 
+    @Query("SELECT f FROM Friendship f WHERE (f.user1 = :user1 AND f.user2 = :user2) OR (f.user1 = :user2 AND f.user2 = :user1)")
+    Optional<Friendship> findByUsers(@Param("user1") User user1, @Param("user2") User user2);
 }
+

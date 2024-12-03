@@ -21,6 +21,8 @@ public class FriendRequest {
     @JoinColumn(name = "receiver_id", nullable = false)
     private User receiver;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String status; // Possible values: PENDING, ACCEPTED, REJECTED
+    private FriendRequestStatus status; // ENUM: PENDING, ACCEPTED, REJECTED
 }
+

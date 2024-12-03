@@ -1,5 +1,6 @@
 package com.camping_fisa.bouffonduroiapi.controllers.social.dto;
 
+import com.camping_fisa.bouffonduroiapi.entities.social.FriendRequestStatus;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,10 +10,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FriendRequestDto {
-    private Long id; // Peut être null à la création
+    private Long id;
     @NotNull
-    private Long senderId;    // Ne peut pas être null
+    private Long senderId;
     @NotNull
-    private Long receiverId;  // Ne peut pas être null
-    private String status;    // Optionnel pour l'initialisation
+    private Long receiverId;
+    private FriendRequestStatus status;
 }
