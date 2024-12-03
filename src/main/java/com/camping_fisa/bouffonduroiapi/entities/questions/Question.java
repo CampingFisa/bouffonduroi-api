@@ -32,6 +32,9 @@ public class Question {
     @Column(name = "correct_answer")
     private String correctAnswer;
 
+    @Column(name = "type")
+    private String type;
+
     @ManyToOne
     @JoinColumn(name = "category_id")
     @JsonBackReference

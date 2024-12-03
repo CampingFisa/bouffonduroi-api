@@ -35,13 +35,24 @@ public class QuizService {
     }
 
     public AnswerResponseDto checkAnswer(AnswerRequestDto answerRequestDto) {
+        if (answerRequestDto.getResponse() == null || answerRequestDto.getResponse().isBlank()) {
+            throw new IllegalArgumentException("Response cannot be null or blank");
+        }
+
         Question question = questionRepository.findById(answerRequestDto.getQuestionId())
                 .orElseThrow(() -> new NotFoundException("Question not found"));
 
-        boolean correct = question.getCorrectAnswer().equalsIgnoreCase(answerRequestDto.getResponse());
+        if (!question.getType().equalsIgnoreCase(answerRequestDto.getType())) {
+            throw new IllegalArgumentException(
+                    "Invalid response type. Expected: " + question.getType() + ", but got: " + answerRequestDto.getType()
+            );
+        }
+
+        boolean correct = question.getCorrectAnswer().trim().equalsIgnoreCase(answerRequestDto.getResponse().trim());
 
         return new AnswerResponseDto(correct);
     }
+
 
     private QuestionDto toQuestionDto(Question question) {
         return new QuestionDto(
