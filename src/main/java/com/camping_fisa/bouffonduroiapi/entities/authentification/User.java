@@ -1,6 +1,5 @@
 package com.camping_fisa.bouffonduroiapi.entities.authentification;
 
-import com.camping_fisa.bouffonduroiapi.entities.social.Friend;
 import com.camping_fisa.bouffonduroiapi.entities.social.FriendRequest;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -31,12 +30,6 @@ public class User {
 
     @Column(name = "is_admin", nullable = false)
     private boolean isAdmin;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Friend> friends = new ArrayList<>();
-
-    @OneToMany(mappedBy = "friend", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Friend> reverseFriends = new ArrayList<>();
 
     @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<FriendRequest> sentRequests = new ArrayList<>();

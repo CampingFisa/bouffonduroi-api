@@ -17,6 +17,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,7 +30,8 @@ public class FriendService {
 
     public void sendFriendRequest(Authentication authentication, Long receiverId) {
         User sender = authService.authenticate(authentication);
-        User receiver = userRepository.findById(receiverId).orElseThrow(() -> new NotFoundException("User not found"));
+        User receiver = userRepository.findById(receiverId)
+                .orElseThrow(() -> new NotFoundException(receiverId.toString(), User.class));
 
         if (friendRequestRepository.existsBySenderAndReceiver(sender, receiver)) {
             throw new ConflictException("Friend request already exists");
@@ -53,7 +55,7 @@ public class FriendService {
     public void respondToFriendRequest(Authentication authentication, Long requestId, String status) {
         User receiver = authService.authenticate(authentication);
         FriendRequest request = friendRequestRepository.findByIdAndReceiver(requestId, receiver)
-                .orElseThrow(() -> new NotFoundException("Request not found"));
+                .orElseThrow(() -> new NotFoundException(requestId.toString(), FriendRequest.class));
 
         if (!"ACCEPTED".equals(status) && !"REJECTED".equals(status)) {
             throw new BadRequestException("Invalid status");
@@ -72,31 +74,42 @@ public class FriendService {
 
     public List<UserDto> getFriends(Authentication authentication) {
         User user = authService.authenticate(authentication);
-        List<Friendship> friendships = friendshipRepository.findByUser1OrUser2(user, user);
+        Optional<Friendship> friendships = friendshipRepository.findFriendshipBetweenUsers(user, user);
 
         return friendships.stream()
                 .map(friendship -> {
                     User friend = friendship.getUser1().equals(user) ? friendship.getUser2() : friendship.getUser1();
-                    return new UserDto(friend.getId(), friend.getUsername(), null, friend.getEmail(), friend.getAddress(), friend.isAdmin());
+                    return new UserDto(
+                            friend.getId(),
+                            friend.getUsername(),
+                            null, // Suppression du mot de passe
+                            friend.getEmail(),
+                            friend.getAddress(),
+                            friend.isAdmin()
+                    );
                 })
                 .collect(Collectors.toList());
     }
 
+
+
     public void deleteFriend(Authentication authentication, Long friendId) {
+        // Authentification de l'utilisateur
         User user = authService.authenticate(authentication);
+
+        // Vérification de l'existence de l'ami
         User friend = userRepository.findById(friendId)
-                .orElseThrow(() -> new NotFoundException("User not found"));
+                .orElseThrow(() -> new NotFoundException("Friend with ID " + friendId + " not found", User.class));
 
-        Friendship friendship = friendshipRepository
-                .findByUser1OrUser2(user, friend)
-                .stream()
-                .filter(f -> (f.getUser1().equals(user) && f.getUser2().equals(friend)) ||
-                        (f.getUser1().equals(friend) && f.getUser2().equals(user)))
-                .findFirst()
-                .orElseThrow(() -> new NotFoundException("Friendship not found"));
+        // Recherche de la relation d'amitié
+        Friendship friendship = friendshipRepository.findFriendshipBetweenUsers(user, friend)
+                .orElseThrow(() -> new NotFoundException("Friendship between user " + user.getId() + " and friend " + friend.getId(), Friendship.class));
 
+        // Suppression de la relation d'amitié
         friendshipRepository.delete(friendship);
     }
+
+
 
 
 }

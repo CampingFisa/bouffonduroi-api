@@ -17,11 +17,13 @@ CREATE TABLE friend_requests (
                                  CONSTRAINT fk_receiver FOREIGN KEY (receiver_id) REFERENCES users (id) ON DELETE CASCADE
 );
 
-CREATE TABLE friends (
-                         id SERIAL PRIMARY KEY,
-                         user_id INT NOT NULL,
-                         friend_id INT NOT NULL,
-                         CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
-                         CONSTRAINT fk_friend FOREIGN KEY (friend_id) REFERENCES users (id) ON DELETE CASCADE
+CREATE TABLE friendships (
+                             id SERIAL PRIMARY KEY,
+                             user1_id INT NOT NULL,
+                             user2_id INT NOT NULL,
+                             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                             CONSTRAINT fk_user1 FOREIGN KEY (user1_id) REFERENCES users (id) ON DELETE CASCADE,
+                             CONSTRAINT fk_user2 FOREIGN KEY (user2_id) REFERENCES users (id) ON DELETE CASCADE,
+                             CONSTRAINT valid_friendship CHECK (user1_id <> user2_id)
 );
 
