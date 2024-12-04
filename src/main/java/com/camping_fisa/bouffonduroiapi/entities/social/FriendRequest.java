@@ -24,5 +24,16 @@ public class FriendRequest {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private FriendRequestStatus status; // ENUM: PENDING, ACCEPTED, REJECTED
+
+    @Override
+    public String toString() {
+        return "FriendRequest{" +
+                "id=" + id +
+                ", status=" + status +
+                ", senderId=" + (sender != null ? sender.getId() : null) +
+                ", receiverId=" + (receiver != null ? receiver.getId() : null) +
+                '}';
+    }
+
 }
 

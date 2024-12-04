@@ -54,8 +54,8 @@ public class QuizService {
     }
 
 
-    private QuestionDto toQuestionDto(Question question) {
-        return new QuestionDto(
+    private QuestionsDto toQuestionDto(Question question) {
+        return new QuestionsDto(
                 question.getQuestionId(),
                 question.getQuestion(),
                 List.of(question.getAnswerA(), question.getAnswerB(), question.getAnswerC(), question.getAnswerD())
