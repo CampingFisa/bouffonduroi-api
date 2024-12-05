@@ -37,15 +37,27 @@ public class FriendService {
         User receiver = userRepository.findById(receiverId)
                 .orElseThrow(() -> new NotFoundException("User not found"));
 
-        if (friendRequestRepository.findBySenderAndReceiver(sender, receiver).isPresent()) {
-            throw new ConflictException("Friend request already sent");
-        }
+        // Vérifier si une demande existe déjà
+        Optional<FriendRequest> existingRequest = friendRequestRepository.findBySenderAndReceiver(sender, receiver);
 
-        FriendRequest request = new FriendRequest();
-        request.setSender(sender);
-        request.setReceiver(receiver);
-        request.setStatus(FriendRequestStatus.PENDING);
-        friendRequestRepository.save(request);
+        if (existingRequest.isPresent()) {
+            FriendRequest request = existingRequest.get();
+
+            if (request.getStatus() == FriendRequestStatus.PENDING) {
+                throw new ConflictException("Friend request already sent");
+            } else {
+                // Réinitialiser la demande existante
+                request.setStatus(FriendRequestStatus.PENDING);
+                friendRequestRepository.save(request);
+            }
+        } else {
+            // Créer une nouvelle demande si aucune n'existe
+            FriendRequest newRequest = new FriendRequest();
+            newRequest.setSender(sender);
+            newRequest.setReceiver(receiver);
+            newRequest.setStatus(FriendRequestStatus.PENDING);
+            friendRequestRepository.save(newRequest);
+        }
     }
 
     public List<FriendRequestDto> getPendingRequests(Authentication auth) {
