@@ -35,7 +35,7 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                        .requestMatchers("/api/users/register", "/api/users/login", "/api/users/logout").permitAll()
+                        .requestMatchers("/api/users/register", "/api/users/login", "/api/users/logout", "/api/database/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(new BearerTokenFilter(), UsernamePasswordAuthenticationFilter.class)
