@@ -4,11 +4,10 @@ import com.camping_fisa.bouffonduroiapi.entities.authentification.User;
 import jakarta.persistence.*;
 import lombok.Data;
 
-@Data
 @Entity
 @Table(name = "friend_requests")
+@Data
 public class FriendRequest {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
