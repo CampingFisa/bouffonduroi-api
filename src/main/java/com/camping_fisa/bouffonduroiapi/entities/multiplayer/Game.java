@@ -1,5 +1,6 @@
 package com.camping_fisa.bouffonduroiapi.entities.multiplayer;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -23,6 +24,7 @@ public class Game {
     private GameStatus status;
 
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<Player> players = new ArrayList<>();
 
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, orphanRemoval = true)

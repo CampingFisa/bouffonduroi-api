@@ -1,5 +1,6 @@
 package com.camping_fisa.bouffonduroiapi.services.multiplayer;
 
+import com.camping_fisa.bouffonduroiapi.controllers.multiplayer.dto.GameDto;
 import com.camping_fisa.bouffonduroiapi.entities.authentification.User;
 import com.camping_fisa.bouffonduroiapi.entities.multiplayer.Game;
 import com.camping_fisa.bouffonduroiapi.entities.multiplayer.GameStatus;
@@ -27,12 +28,12 @@ public class GameService {
     private final FriendService friendService;
     private final UserRepository userRepository;
 
-    public Game createDuelWithFriend(Authentication auth, String friendUsername) {
+    public Game createDuelWithFriend(Authentication auth, Long friendId) {
         User currentUser = authService.authenticate(auth);
 
-        // Récupérer l'ami à partir du nom d'utilisateur
-        User friend = userRepository.findByUsername(friendUsername)
-                .orElseThrow(() -> new NotFoundException("User not found for username: " + friendUsername, UserRepository.class));
+        // Récupérer l'ami à partir de l'id de l'ami
+        User friend = userRepository.findById(friendId)
+                .orElseThrow(() -> new NotFoundException("User not found for friendId: " + friendId, UserRepository.class));
 
         // Créer les joueurs
         Player player1 = playerService.createPlayer(currentUser.getUsername());
@@ -95,6 +96,22 @@ public class GameService {
         });
 
         return gameRepository.save(game);
+    }
+    public GameDto findGameDtoById(Long gameId) {
+        Game game = findGameById(gameId);
+        return toGameDto(game);
+    }
+    public GameDto toGameDto(Game game) {
+        List<String> playerUsernames = game.getPlayers().stream()
+                .map(Player::getUsername)
+                .toList();
+
+        return new GameDto(
+                game.getId(),
+                game.isFinished(),
+                game.getStatus().toString(),
+                playerUsernames
+        );
     }
 }
 
