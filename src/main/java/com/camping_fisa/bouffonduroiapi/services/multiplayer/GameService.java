@@ -43,6 +43,13 @@ public class GameService {
         return createGame(List.of(player1, player2));
     }
 
+    public Game createDuelGame(User player1User, User player2User) {
+        Player player1 = playerService.createPlayer(player1User.getUsername());
+        Player player2 = playerService.createPlayer(player2User.getUsername());
+
+        return createGame(List.of(player1, player2));
+    }
+
 
     public Game createDuelWithRandomPlayer(Authentication auth) {
         User currentUser = authService.authenticate(auth);
