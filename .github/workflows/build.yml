@@ -16,12 +16,40 @@ jobs:
       - name: Setup JDK
         uses: actions/setup-java@v4
         with:
-          java-version: '21'
-          distribution: 'temurin'
+          java-version: "21"
+          distribution: "temurin"
 
       - name: Build with Maven
         run: mvn clean package
 
+      # Analyse du code avec SonarCloud
+      - name: SonarCloud analysis
+        uses: sonarsource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            -Dsonar.projectKey=[bouffonduroi-api]
+            -Dsonar.organization=[CampingFisa]
+
+      # Configuration de Node.js pour Semantic Release
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+
+      # Installation des dépendances JS (si votre projet contient un package.json)
+      - name: Install Semantic Release
+        run: npm install
+
+      # Exécution de Semantic Release
+      - name: Semantic Release
+        run: npx semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Construction de l'image Docker
       - name: Build Docker image
         run: |
           docker build -t registry.mathieu-symphorien.fr/bouffonduroi-api-jesterquizz-api:latest .
@@ -29,8 +57,9 @@ jobs:
           DOCKER_BUILDKIT: 1
 
       - name: Log in to Docker registry
-        run: echo "t" | docker login registry.mathieu-symphorien.fr --username "t" --password-stdin
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login registry.mathieu-symphorien.fr --username "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
+      # Tag et push de l'image Docker
       - name: Tag and Push Docker image
         run: |
           docker tag registry.mathieu-symphorien.fr/bouffonduroi-api-jesterquizz-api:latest registry.mathieu-symphorien.fr/bouffonduroi-api-jesterquizz-api:latest
