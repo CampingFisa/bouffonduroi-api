@@ -30,8 +30,8 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           args: >
-            -Dsonar.projectKey=[bouffonduroi-api]
-            -Dsonar.organization=[CampingFisa]
+            -Dsonar.projectKey=bouffonduroi-api
+            -Dsonar.organization=CampingFisa
 
       # Configuration de Node.js pour Semantic Release
       - name: Setup Node.js
