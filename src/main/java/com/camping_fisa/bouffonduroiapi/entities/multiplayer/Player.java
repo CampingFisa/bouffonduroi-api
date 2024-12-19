@@ -1,6 +1,8 @@
 package com.camping_fisa.bouffonduroiapi.entities.multiplayer;
 
 import com.camping_fisa.bouffonduroiapi.entities.authentification.User;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -19,10 +21,12 @@ public class Player {
     private int totalScore;
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "game_id")
     private Game game;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
