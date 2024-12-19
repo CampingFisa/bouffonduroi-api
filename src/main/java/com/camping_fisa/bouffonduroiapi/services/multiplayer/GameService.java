@@ -6,6 +6,7 @@ import com.camping_fisa.bouffonduroiapi.entities.multiplayer.Game;
 import com.camping_fisa.bouffonduroiapi.entities.multiplayer.GameStatus;
 import com.camping_fisa.bouffonduroiapi.entities.multiplayer.Player;
 import com.camping_fisa.bouffonduroiapi.entities.multiplayer.PlayerGameHistory;
+import com.camping_fisa.bouffonduroiapi.exceptions.BadRequestException;
 import com.camping_fisa.bouffonduroiapi.exceptions.NotFoundException;
 import com.camping_fisa.bouffonduroiapi.repositories.authentification.UserRepository;
 import com.camping_fisa.bouffonduroiapi.repositories.multiplayer.GameRepository;
@@ -50,15 +51,51 @@ public class GameService {
         return createGame(List.of(player1, player2));
     }
 
+
     private Game createGame(List<Player> players) {
         Game game = new Game();
-        game.setPlayers(players);
+        game.setPlayers(new ArrayList<>());
         game.setRounds(new ArrayList<>());
         game.setStatus(GameStatus.ONGOING);
 
-        return gameRepository.save(game);
+        // Lier chaque joueur au jeu
+        for (Player player : players) {
+            player.setGame(game);
+            game.getPlayers().add(player);
+        }
 
+        // Sauvegarder le jeu
+        return gameRepository.save(game);
     }
+
+
+    public void deleteGame(Long gameId, Authentication auth) {
+        User user = authService.authenticate(auth);
+        Game game = findGameById(gameId);
+
+        boolean isParticipant = game.getPlayers().stream()
+                .anyMatch(player -> player.getUsername().equals(user.getUsername()));
+
+        if (!isParticipant) {
+            throw new BadRequestException("You are not authorized to delete this game");
+        }
+
+        gameRepository.delete(game);
+    }
+
+    public List<GameDto> getUserGames(Authentication auth) {
+        User user = authService.authenticate(auth);
+
+        List<Game> games = gameRepository.findAll().stream()
+                .filter(game -> game.getPlayers().stream()
+                        .anyMatch(player -> player.getUsername().equals(user.getUsername())))
+                .toList();
+
+        return games.stream()
+                .map(this::toGameDto)
+                .toList();
+    }
+
 
     public Game findGameById(Long gameId) {
         return gameRepository.findById(gameId)

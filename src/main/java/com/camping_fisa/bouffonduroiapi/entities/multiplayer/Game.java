@@ -33,5 +33,8 @@ public class Game {
     @ManyToOne
     @JoinColumn(name = "winner_id")
     private Player winner;
+
+    @OneToOne(mappedBy = "game")
+    private DuelRequest duelRequest;
 }
 

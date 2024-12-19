@@ -95,6 +95,37 @@ public class MultiplayerController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    @DeleteMapping("/{gameId}")
+    @Operation(
+            summary = "Delete a game",
+            description = "Delete a specific multiplayer game by its ID.",
+            security = @SecurityRequirement(name = "bearerAuth"),
+            responses = {
+                    @ApiResponse(responseCode = "204", description = "Game deleted"),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized"),
+                    @ApiResponse(responseCode = "404", description = "Game not found")
+            }
+    )
+    public ResponseEntity<Void> deleteGame(@PathVariable Long gameId, Authentication auth) {
+        gameService.deleteGame(gameId, auth);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/games")
+    @Operation(
+            summary = "Get all games of the authenticated user",
+            description = "Retrieve all multiplayer games associated with the authenticated user.",
+            security = @SecurityRequirement(name = "bearerAuth"),
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Games retrieved", content = @Content(schema = @Schema(implementation = GameDto.class))),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized")
+            }
+    )
+    public ResponseEntity<List<GameDto>> getUserGames(Authentication auth) {
+        List<GameDto> games = gameService.getUserGames(auth);
+        return ResponseEntity.ok(games);
+    }
+
     @PatchMapping("/duel/request/{requestId}")
     @Operation(
             summary = "Respond to a duel request",

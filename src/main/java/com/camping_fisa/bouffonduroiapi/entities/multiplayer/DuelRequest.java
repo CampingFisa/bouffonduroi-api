@@ -21,4 +21,8 @@ public class DuelRequest {
     @Enumerated(EnumType.STRING)
     private DuelRequestStatus status; // PENDING, ACCEPTED, REJECTED
 
+    @OneToOne
+    @JoinColumn(name = "game_id")
+    private Game game;
+
 }

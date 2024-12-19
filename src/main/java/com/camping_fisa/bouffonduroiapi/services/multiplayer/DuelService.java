@@ -4,6 +4,7 @@ import com.camping_fisa.bouffonduroiapi.controllers.multiplayer.dto.DuelRequestD
 import com.camping_fisa.bouffonduroiapi.entities.authentification.User;
 import com.camping_fisa.bouffonduroiapi.entities.multiplayer.DuelRequest;
 import com.camping_fisa.bouffonduroiapi.entities.multiplayer.DuelRequestStatus;
+import com.camping_fisa.bouffonduroiapi.entities.multiplayer.Game;
 import com.camping_fisa.bouffonduroiapi.exceptions.BadRequestException;
 import com.camping_fisa.bouffonduroiapi.exceptions.ConflictException;
 import com.camping_fisa.bouffonduroiapi.exceptions.NotFoundException;
@@ -83,12 +84,15 @@ public class DuelService {
             duelRequestRepository.save(request);
 
             if (newStatus == DuelRequestStatus.ACCEPTED) {
-                gameService.createDuelGame(request.getSender(), receiver);
+                Game game = gameService.createDuelGame(request.getSender(), receiver);
+                request.setGame(game);
+                duelRequestRepository.save(request);
             }
         } catch (IllegalArgumentException e) {
             throw new BadRequestException("Invalid status: " + status);
         }
     }
+
     public DuelRequestDto toDuelRequestDto(DuelRequest request) {
         return new DuelRequestDto(
                 request.getId(),

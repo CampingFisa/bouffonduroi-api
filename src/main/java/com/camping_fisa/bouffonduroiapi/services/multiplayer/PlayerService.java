@@ -21,9 +21,13 @@ public class PlayerService {
     public Player createPlayer(String username) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new NotFoundException("User not found for username: " + username));
+
         Player player = new Player();
         player.setUsername(user.getUsername());
         player.setUser(user);
+        player.setTotalScore(0);
+        player.setGame(null); // Le jeu sera lié plus tard
+
         return playerRepository.save(player);
     }
 
