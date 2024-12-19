@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,7 +25,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @Tag(name = "Friend", description = "Friendship Management")
 public class FriendController {
-
     private final FriendService friendService;
 
     @PostMapping("/request")

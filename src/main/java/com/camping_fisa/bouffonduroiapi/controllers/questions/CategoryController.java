@@ -6,18 +6,17 @@ import com.camping_fisa.bouffonduroiapi.services.questions.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.annotation.Resource;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/categories")
 @Tag(name = "Manage categories")
 public class CategoryController {
 
     private final CategoryService categoryService;
-
-    public CategoryController(CategoryService categoryService) {
-        this.categoryService = categoryService;
-    }
 
     @PutMapping("/{categoryId}")
     @Operation(summary = "Update a category", responses = {

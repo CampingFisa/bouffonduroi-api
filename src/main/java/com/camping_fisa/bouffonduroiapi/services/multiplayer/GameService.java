@@ -50,16 +50,6 @@ public class GameService {
         return createGame(List.of(player1, player2));
     }
 
-
-    public Game createDuelWithRandomPlayer(Authentication auth) {
-        User currentUser = authService.authenticate(auth);
-
-        Player player1 = playerService.createPlayer(currentUser.getUsername());
-        Player player2 = playerService.findRandomPlayer();
-
-        return createGame(List.of(player1, player2));
-    }
-
     private Game createGame(List<Player> players) {
         Game game = new Game();
         game.setPlayers(players);

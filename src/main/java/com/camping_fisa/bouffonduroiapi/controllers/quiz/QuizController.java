@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Quiz", description = "Manage solo quizzes")
 @RequiredArgsConstructor
 public class QuizController {
-
     private final QuizService quizService;
 
     @PostMapping
